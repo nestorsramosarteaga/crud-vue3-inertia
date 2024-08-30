@@ -1,4 +1,14 @@
 # crud-vue3-inertia
 
-npm i vue-chartjs chart.js jquery select2 vue3-select2-component
+# Install PHP dependecies
+composer install
+
+# Run migrationes and seeders
+php artisan migrate --seed
+
+# Install Javascript dependecies
+npm install && npm run build
+
+# Run Server
+php artisan serve
 
