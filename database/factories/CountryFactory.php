@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Author>
  */
-class AuthorFactory extends Factory
+class CountryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,7 @@ class AuthorFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
-            'country_id' => $this->faker->numberBetween(1,50)
+            'country' => $this->faker->country()
         ];
     }
 }
