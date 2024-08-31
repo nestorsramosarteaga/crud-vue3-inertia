@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use App\Models\Country;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class AuthorController extends Controller
@@ -12,15 +14,13 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $countries = Country::orderBy('country')->get();
+        $authors = Author::with('country:id,country', 'books:title')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Inertia::render('Authors/Index',[
+            'authors' => $authors,
+            'countries' => $countries
+        ]);
     }
 
     /**
@@ -28,15 +28,15 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'name' => 'required|max:80',
+            'last_name' => 'required|max:80',
+            'country_id' => 'required|exists:countries,id'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Author $author)
-    {
-        //
+        $author = new Author($request->input());
+        $author->save();
+        return redirect('authors');
     }
 
     /**
@@ -44,7 +44,7 @@ class AuthorController extends Controller
      */
     public function edit(Author $author)
     {
-        //
+
     }
 
     /**
@@ -52,7 +52,14 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:80',
+            'last_name' => 'required|max:80',
+            'country_id' => 'required|exists:countries,id'
+        ]);
+
+        $author->update($request->input());
+        return redirect('authors');
     }
 
     /**
@@ -60,6 +67,7 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        $author->delete();
+        return redirect('authors');
     }
 }

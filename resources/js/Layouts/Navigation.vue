@@ -33,7 +33,7 @@
         </li>
 
         <li class="relative px-6 py-3">
-          <NavLink :href="route('about')" :active="route().current('about')">
+          <NavLink :href="route('authors.index')" :active="route().current('authors.index')">
             <template #icon>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" 
@@ -61,13 +61,17 @@
                     clip-rule="evenodd"></path>
             </svg>
           </button>
-            <ul v-show="showingTwoLevelMenu" class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50"
+            <ul v-show="showingTwoLevelMenu || route().current('books.index') || route().current('books.create')" class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50"
                 aria-label="submenu">
               <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800">
-                <a class="w-full" href="#">List</a>
+                  <NavLink :href="route('books.index')" :active="route().current('books.index')">
+                      List
+                  </NavLink>
               </li>
               <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800">
-                <a class="w-full" href="#">Create</a>
+                  <NavLink :href="route('books.create')" :active="route().current('books.create')">
+                      Create
+                  </NavLink>
               </li>
             </ul>
         </li>
