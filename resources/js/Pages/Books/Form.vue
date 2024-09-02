@@ -69,8 +69,8 @@ const save = () => {
     if (props.book == null) {
         try {
             form.post(route('books.store'), {
-                onError: (res) => {
-                    console.err({'msj' : 'Error', err})
+                onError: (err) => {
+                    console.log({'msj' : 'Error', err})
                 },
                 onSuccess: (res) => {
                     console.log({ 'msj': 'success', res });
