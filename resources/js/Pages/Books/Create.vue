@@ -1,6 +1,11 @@
 <script setup>
+import Form from './Form.vue';
+
+const props = defineProps({
+    authors: {type:Object}
+})
 </script>
 
 <template>
-    create
+    <Form :authors="authors" />
 </template>
