@@ -6,6 +6,7 @@ const props = defineProps({
     book: {type:Object},
     authorsOfBook: {type:Object}
 })
+
 </script>
 
 <template>

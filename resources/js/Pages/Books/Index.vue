@@ -61,6 +61,7 @@ const ok = (message) => {
             Books
         </template>
 
+        <!-- message -->
         <div class="inline-flex overflow-hidden mb-4 w-full bg-white rounded-lg shadow-md" :class="classMsj">
             <div class="flex justify-center items-center w-12 bg-green-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

@@ -2,8 +2,9 @@
 import Form from './Form.vue';
 
 const props = defineProps({
-    authors: {type:Object}
-})
+    authors: { type: Object }
+});
+
 </script>
 
 <template>

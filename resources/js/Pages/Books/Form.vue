@@ -8,6 +8,16 @@ import InputGroup from '@/Components/InputGroup.vue';
 import InputError from '@/Components/InputError.vue';
 import { ref } from 'vue';
 
+import select2 from 'select2';
+import $ from 'jquery'
+
+
+window.$ = $;
+window.jQuery = window.$;
+select2();
+import Select2 from 'vue3-select2-component';
+
+
 const props = defineProps({
     authors: {type:Object},
     book: {type:Object},
@@ -33,6 +43,11 @@ const req = ref('required');
 const srcImg = ref('../../storage/img/example.png');
 const msj = ref('');
 const classMsj = ref('hidden');
+const options = ref([]);
+
+props.authors.map((row) => (
+    options.value.push({'id':row.id,'text':row.last_name+' ' +row.name})
+));
 
 if ( props.book != null ) {
     form.isbn = props.book.isbn;
@@ -43,26 +58,40 @@ if ( props.book != null ) {
     form.pages = props.book.pages;
     form.image = props.book.image;
     form.id = props.book.id;
-
     srcImg.value = '../../storage' + props.book.image;
+    props.authorsOfBook.map((row) => {
+        form.authors.push(row.id)
+    });
 }
+
 
 const save = () => {
     if (props.book == null) {
-        form.post(route('books.store', {
-            onSuccess: () => {
-                console.log('success');
-                ok('Book created');
-            }
-        }));
+        try {
+            form.post(route('books.store'), {
+                onError: (res) => {
+                    console.err({'msj' : 'Error', err})
+                },
+                onSuccess: (res) => {
+                    console.log({ 'msj': 'success', res });
+                    ok('Book created');
+                }
+            });
+        } catch (err) {
+            console.log({ err });
+        }
     } else {
-        form.post(route('updateBook'))
+        try {
+            form.post(route('updateBook'));
+        } catch (err) {
+            console.log({ err });
+        }
     }
 }
 
 const ok = (message) => {
-    console.log({ message });
     form.reset();
+    srcImg.value = '';
     msj.value = message;
     classMsj.value = 'block';
     setTimeout(() => {
@@ -71,7 +100,6 @@ const ok = (message) => {
 }
 
 const showImg = (e) => {
-    // console.log(e.target.files[0]);
     form.image = e.target.files[0];
     srcImg.value = URL.createObjectURL(e.target.files[0]);
 }
@@ -95,6 +123,7 @@ const showImg = (e) => {
             </div>
         </template>
 
+        <!-- Message -->
         <div class="inline-flex overflow-hidden mb-4 w-full bg-white rounded-lg shadow-md" :class="classMsj">
             <div class="flex justify-center items-center w-12 bg-green-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -113,7 +142,7 @@ const showImg = (e) => {
         <div class="grid gap-6 bg-white mb-8 md:grid-cols-2 border rounded-lg">
             <div class="min-w-0 p-4 rounded-lg shadow-xs">
 
-                <form class="mt-6 mb-6 space-y-6 max-w-xl" @submit.prevent="save" >
+                <form class="mt-6 mb-6 space-y-6 max-w-xl" @submit.prevent="save()" >
 
                     <InputGroup :text="'ISBN'" :required="'required'" :type="'text'" v-model="form.isbn">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -157,17 +186,25 @@ const showImg = (e) => {
                     </InputGroup>
                     <InputError :message="form.errors.pages"></InputError>
 
-                    <InputGroup v-if="props.book == null" @change="showImg($event)" :required="'required'" :type="'file'" :accept="'image/*'">
+                    <InputGroup v-if="props.book == null" @change="showImg($event)" :required="'required'" :type="'file'" v-model="form.image" :accept="'image/*'">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                         </svg>
                     </InputGroup>
-                    <InputGroup v-else @change="showImg($event)" :type="'file'" :accept="'image/*'">
+                    <InputGroup v-else @change="showImg($event)" :type="'file'" v-model="form.image"  :accept="'image/*'">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                         </svg>
                     </InputGroup>
                     <InputError :message="form.errors.image"></InputError>
+
+                    <span class="¨mt-2">Add Authors</span>
+                    <Select2 v-model="form.authors"
+                        :options="options"
+                        :settings="{multiple:true, width:'100%'}"
+                        @change="form.authors = $event.target.value"
+                    />
+                    <InputError :message="form.errors.authors"></InputError>
 
                     <PrimaryButton @click="save">Save</PrimaryButton>
                 </form>
