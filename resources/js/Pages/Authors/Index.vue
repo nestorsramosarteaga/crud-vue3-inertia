@@ -188,6 +188,8 @@ const ok = (message) => {
             <div class="p-6">
                 <p>Author: <span class="text-lg font-medium text-gray-900">{{ v.name }}</span></p>
                 <p>Country: <span class="text-lg font-medium text-gray-900">{{ v.country }}</span></p>
+            </div>
+            <div class="m-6 flex justify-end">
                 <SecondaryButton @click="closeModalView">Close</SecondaryButton>
             </div>
         </Modal>
@@ -228,16 +230,25 @@ const ok = (message) => {
         </Modal>
 
         <Modal :show="showModalDelete" @close="closeModalDelete">
-        <div class="p-6">
-            <p class="text-2xl text-gray-500 mb-3">
-                Are you sure delete to
-                <span class="text-2xl font-medium text-gray-900">{{ v.name }}</span> ?
-            </p>
-            <PrimaryButton @click="deleteAuthor">Yes, delete</PrimaryButton>
-        </div>
-        <div class="m-6 flex justify-end">
-            <SecondaryButton @click="closeModalDelete">Close</SecondaryButton>
-        </div>
+            <div class="p-6">
+                <div class="inline-flex">
+                    <div class="flex justify-center items-center w-12 text-red-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        </svg>
+                    </div>
+                    <p class="text-2xl text-gray-500 mb-3">
+                        Are you sure delete to
+                        <span class="text-2xl font-medium text-gray-900">{{ item.name }}</span> ?
+                    </p>
+                </div>
+                <div>
+                    <PrimaryButton @click="deleteAuthor">Yes, delete</PrimaryButton>
+                </div>
+            </div>
+            <div class="m-6 flex justify-end">
+                <SecondaryButton @click="closeModalDelete">Close</SecondaryButton>
+            </div>
         </Modal>
 
 	</AuthenticatedLayout>
